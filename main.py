@@ -37,6 +37,16 @@ def parseFen():
     
     fen = board.fen().split(" ")[0].split("/")
     #print(fen)
+    for i in range(len(fen)):
+        fen[i] = fen[i].replace("2", "11") 
+        fen[i] = fen[i].replace("3", "111") 
+        fen[i] = fen[i].replace("4", "1111") 
+        fen[i] = fen[i].replace("5", "11111") 
+        fen[i] = fen[i].replace("6", "111111") 
+        fen[i] = fen[i].replace("7", "1111111") 
+        fen[i] = fen[i].replace("8", "11111111") 
+
+    #print(fen)
 
     pieceChars = 'rnbqkbnrppppppppRNBQKBNRPPPPPPPP'
     pieces = []
@@ -59,7 +69,7 @@ def parseFenPiece(piece, fen):
     for y, row in enumerate(fen):
         for x, currentPiece in enumerate(row):
             if(piece == currentPiece):
-                fen[y] = fen[y][:x] + " " + fen[y][x+1:] 
+                fen[y] = fen[y][:x] + "1" + fen[y][x+1:] 
                 #print(x, y)
                 return (x/7, y/7, 1, fen)
     return (0, 0, 0, fen)
@@ -75,13 +85,48 @@ def render():
 
     #blackRook = g.Image(g.Point(boardFen[0]*700+95, boardFen[1]*700+95), "images/blackRook.png")
     #blackKnight = g.Image(g.Point(boardFen[3]*700+95, boardFen[4]*700+95), "images/blackKnight.png")
+    #print(boardFen[84]*7, boardFen[85]*7)
+
 
     renderPieces = []
-    renderPieces.append(g.Image(g.Point(boardFen[0]*700+145, boardFen[1]*700+145), "images/blackRook.png"))
-    renderPieces.append(g.Image(g.Point(boardFen[3]*700+145, boardFen[4]*700+145), "images/blackKnight.png"))
+    renderPieces.append((g.Image(g.Point(boardFen[0]*700+145, boardFen[1]*700+145), "images/blackRook.png"), boardFen[2]))
+    renderPieces.append((g.Image(g.Point(boardFen[3]*700+145, boardFen[4]*700+145), "images/blackKnight.png"), boardFen[5]))
+    renderPieces.append((g.Image(g.Point(boardFen[6]*700+145, boardFen[7]*700+145), "images/blackBishop.png"), boardFen[8]))
+    renderPieces.append((g.Image(g.Point(boardFen[9]*700+145, boardFen[10]*700+145), "images/blackQueen.png"), boardFen[11]))
+    renderPieces.append((g.Image(g.Point(boardFen[12]*700+145, boardFen[13]*700+145), "images/blackKing.png"), boardFen[14]))
+    renderPieces.append((g.Image(g.Point(boardFen[15]*700+145, boardFen[16]*700+145), "images/blackBishop.png"), boardFen[17]))
+    renderPieces.append((g.Image(g.Point(boardFen[18]*700+145, boardFen[19]*700+145), "images/blackKnight.png"), boardFen[20]))
+    renderPieces.append((g.Image(g.Point(boardFen[21]*700+145, boardFen[22]*700+145), "images/blackRook.png"), boardFen[23]))
+    renderPieces.append((g.Image(g.Point(boardFen[24]*700+145, boardFen[25]*700+145), "images/blackPawn.png"), boardFen[26]))
+    renderPieces.append((g.Image(g.Point(boardFen[27]*700+145, boardFen[28]*700+145), "images/blackPawn.png"), boardFen[29]))
+    renderPieces.append((g.Image(g.Point(boardFen[30]*700+145, boardFen[31]*700+145), "images/blackPawn.png"), boardFen[32]))
+    renderPieces.append((g.Image(g.Point(boardFen[33]*700+145, boardFen[34]*700+145), "images/blackPawn.png"), boardFen[35]))
+    renderPieces.append((g.Image(g.Point(boardFen[36]*700+145, boardFen[37]*700+145), "images/blackPawn.png"), boardFen[38]))
+    renderPieces.append((g.Image(g.Point(boardFen[39]*700+145, boardFen[40]*700+145), "images/blackPawn.png"), boardFen[41]))
+    renderPieces.append((g.Image(g.Point(boardFen[42]*700+145, boardFen[43]*700+145), "images/blackPawn.png"), boardFen[44]))
+    renderPieces.append((g.Image(g.Point(boardFen[45]*700+145, boardFen[46]*700+145), "images/blackPawn.png"), boardFen[47]))
+
+    renderPieces.append((g.Image(g.Point(boardFen[48]*700+145, boardFen[49]*700+145), "images/whiteRook.png"), boardFen[50]))
+    renderPieces.append((g.Image(g.Point(boardFen[51]*700+145, boardFen[52]*700+145), "images/whiteKnight.png"), boardFen[53]))
+    renderPieces.append((g.Image(g.Point(boardFen[54]*700+145, boardFen[55]*700+145), "images/whiteBishop.png"), boardFen[56]))
+    renderPieces.append((g.Image(g.Point(boardFen[57]*700+145, boardFen[58]*700+145), "images/whiteQueen.png"), boardFen[59]))
+    renderPieces.append((g.Image(g.Point(boardFen[60]*700+145, boardFen[61]*700+145), "images/whiteKing.png"), boardFen[62]))
+    renderPieces.append((g.Image(g.Point(boardFen[63]*700+145, boardFen[64]*700+145), "images/whiteBishop.png"), boardFen[65]))
+    renderPieces.append((g.Image(g.Point(boardFen[66]*700+145, boardFen[67]*700+145), "images/whiteKnight.png"), boardFen[68]))
+    renderPieces.append((g.Image(g.Point(boardFen[69]*700+145, boardFen[70]*700+145), "images/whiteRook.png"), boardFen[71]))
+    renderPieces.append((g.Image(g.Point(boardFen[72]*700+145, boardFen[73]*700+145), "images/whitePawn.png"), boardFen[74]))
+    renderPieces.append((g.Image(g.Point(boardFen[75]*700+145, boardFen[76]*700+145), "images/whitePawn.png"), boardFen[77]))
+    renderPieces.append((g.Image(g.Point(boardFen[78]*700+145, boardFen[79]*700+145), "images/whitePawn.png"), boardFen[80]))
+    renderPieces.append((g.Image(g.Point(boardFen[81]*700+145, boardFen[82]*700+145), "images/whitePawn.png"), boardFen[83]))
+    renderPieces.append((g.Image(g.Point(boardFen[84]*700+145, boardFen[85]*700+145), "images/whitePawn.png"), boardFen[86]))
+    renderPieces.append((g.Image(g.Point(boardFen[87]*700+145, boardFen[88]*700+145), "images/whitePawn.png"), boardFen[89]))
+    renderPieces.append((g.Image(g.Point(boardFen[90]*700+145, boardFen[91]*700+145), "images/whitePawn.png"), boardFen[92]))
+    renderPieces.append((g.Image(g.Point(boardFen[93]*700+145, boardFen[94]*700+145), "images/whitePawn.png"), boardFen[95]))
+
 
     for i in renderPieces:
-        i.draw(win)
+        if(i[1]):
+            i[0].draw(win)
 
 
 
