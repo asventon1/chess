@@ -8,6 +8,7 @@ import torchvision
 import torchvision.transforms as transforms
 import torch.nn as nn
 import torch.nn.functional as F
+import os.path
 
 
 
@@ -16,24 +17,30 @@ board = chess.Board()
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
-        self.fc1 = nn.Linear(100, 120)
-        self.fc2 = nn.Linear(120, 120)
-        self.fc3 = nn.Linear(120, 50)
-        self.fc4 = nn.Linear(50, 10)
-        self.fc5 = nn.Linear(10, 1)
+        self.fc1 = nn.Linear(100, 200)
+        self.fc2 = nn.Linear(200, 150)
+        self.fc3 = nn.Linear(150, 120)
+        self.fc4 = nn.Linear(120, 50)
+        self.fc5 = nn.Linear(50, 10)
+        self.fc6 = nn.Linear(10, 1)
 
     def forward(self, x):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
         x = F.relu(self.fc4(x))
-        x = torch.sigmoid(self.fc5(x))
+        x = F.relu(self.fc5(x))
+        x = torch.sigmoid(self.fc6(x))
         return x
 
+
 net = Net()
+if(os.path.exists("model1.pt")):
+   checkpoint = torch.load("model1.pt") 
+   net.load_state_dict(checkpoint['net'])
 
 
-def parseFen():
+def parseFen(white, render=False):
     
     fen = board.fen().split(" ")[0].split("/")
     #print(fen)
@@ -48,11 +55,14 @@ def parseFen():
 
     #print(fen)
 
-    pieceChars = 'rnbqkbnrppppppppRNBQKBNRPPPPPPPP'
+    if(white and not render):
+        pieceChars = 'RNBQKBNRPPPPPPPPrnbqkbnrpppppppp'
+    else:
+        pieceChars = 'rnbqkbnrppppppppRNBQKBNRPPPPPPPP'
     pieces = []
     for i in pieceChars:
         #print(i)
-        parsedFen = parseFenPiece(i, fen)
+        parsedFen = parseFenPiece(i, fen, white)
         pieces.append(parsedFen[0])
         pieces.append(parsedFen[1])
         pieces.append(parsedFen[2])
@@ -63,7 +73,7 @@ def parseFen():
 
     return pieces
 
-def parseFenPiece(piece, fen):
+def parseFenPiece(piece, fen, white):
     #print(fen)
     #print("piece", piece)
     for y, row in enumerate(fen):
@@ -71,7 +81,11 @@ def parseFenPiece(piece, fen):
             if(piece == currentPiece):
                 fen[y] = fen[y][:x] + "1" + fen[y][x+1:] 
                 #print(x, y)
-                return (x/7, y/7, 1, fen)
+                if(white):
+                    return (x/7, y/7, 1, fen)
+                else:
+                    return (x/7, 1-y/7, 1, fen)
+
     return (0, 0, 0, fen)
 
 win = g.GraphWin("Cool Chess Game", 1000, 1000)
@@ -81,7 +95,7 @@ def render():
     boardImage = g.Image(g.Point(500, 500), "images/chessBoard.png")
     boardImage.draw(win)
 
-    boardFen = parseFen()
+    boardFen = parseFen(True, render = True)
 
     #blackRook = g.Image(g.Point(boardFen[0]*700+95, boardFen[1]*700+95), "images/blackRook.png")
     #blackKnight = g.Image(g.Point(boardFen[3]*700+95, boardFen[4]*700+95), "images/blackKnight.png")
@@ -161,7 +175,7 @@ while True:
 
     moves = list(board.legal_moves)
     for move in moves:
-        boardInput = parseFen()
+        boardInput = parseFen(False)
         #print(move.uci())
         letterDict = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7}
         x1 = letterDict[move.uci()[0]]/7
